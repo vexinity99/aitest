@@ -10,15 +10,21 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
   output.textContent = "Generating quiz...";
 
   try {
-    const res = await fetch("http://localhost:3000/api/generate", {
+    // Use relative path to Vercel API route
+    const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt })
     });
 
+    if (!res.ok) {
+      throw new Error(`Server responded with ${res.status}`);
+    }
+
     const data = await res.json();
     output.textContent = data.output;
   } catch (err) {
     output.textContent = "Error: " + err.message;
+    console.error(err);
   }
 });
